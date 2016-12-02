@@ -13,15 +13,15 @@ import java.io.IOException;
 
 public class Connection {
 
-  public static String serverURL = "https://momentify.eu.ngrok.io/api";
+  public static String serverURL = "https://localhost:8000";
   private CloseableHttpClient httpClient;
 
   public Connection(){
     this.httpClient = HttpClients.createDefault();
   }
 
-
-  public void execute(HttpUriRequest uriRequest){
+//Vi tilføjer responseparser som et ekstra argument. På den lever 2 argumenter
+  public void execute(HttpUriRequest uriRequest, final ResponseParser parser){
 
     // Create a custom response handler
     ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -32,7 +32,7 @@ public class Connection {
           HttpEntity entity = response.getEntity();
           return entity != null ? EntityUtils.toString(entity) : null;
         } else {
-          //Handle error
+          parser.error(status); //det ene argument fra responsepasser
         }
         return null;
       }
@@ -40,9 +40,9 @@ public class Connection {
     };
 
     try {
+      //returnere vores json til klienten
       String json = this.httpClient.execute(uriRequest, responseHandler);
-
-      //Handle successful response
+      parser.payload(json);
 
     } catch (IOException e) {
       e.printStackTrace();
