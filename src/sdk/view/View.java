@@ -2,7 +2,6 @@ package sdk.view;
 
 
 import sdk.connection.ResponseCallback;
-import sdk.models.Book;
 import sdk.models.User;
 import sdk.services.BookService;
 
@@ -15,19 +14,25 @@ import java.util.Scanner;
  */
 public class View {
     Scanner input;
-    private BookService bookServices;
+    private BookService service;
 
-    public View(BookService bookServices) {
+    public View(BookService service) {
         input = new Scanner(System.in);
-        this.bookServices = bookServices;
+        this.service = service;
 
         login();
+    }
+
+    public static void main(String[] args) {
+        BookService service = new BookService();
+        View view = new View(service);
+        view.login();
     }
 
     private void login() {
 
 
-        System.out.println("===Velkommen til Brugtbogbørsen===");
+        System.out.println("Velkommen til undervisningsevaluering");
         System.out.println("Indtast venligst brugernavn og adgangskode");
 
 
@@ -37,18 +42,20 @@ public class View {
         System.out.println("\nBrugernavn: ");
         String username = input.next();
 
-        user.setUsername(username);
+        user.setCbsMail(username);
         System.out.println("\nPassword: ");
         String password = input.next();
         user.setPassword(password);
 
 
-        bookServices.login(user, new ResponseCallback<User>() {
+        service.login(user, new ResponseCallback<User>() {
             public void success(User data) {
-                System.out.println(data.getUsername());
+                System.out.print("yes");
+                System.out.println(data.getCbsMail());
             }
 
             public void error(int status) {
+                System.out.printf("status");
 
             }
         });
@@ -56,6 +63,8 @@ public class View {
 
 }
 
+}
+/*
     private void createBook() {
 
         System.out.println("Create book is running");
@@ -91,9 +100,7 @@ public class View {
                 System.out.println(status);
             }
         });
+*/
 
 
-    }
 
-
-}

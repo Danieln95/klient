@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class Connection {
 
-  public static String serverURL = "https://localhost:8000";
+  public static String serverURL = "http://localhost:5000/api";
   private CloseableHttpClient httpClient;
 
   public Connection(){

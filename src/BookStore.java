@@ -1,15 +1,6 @@
-import org.apache.http.client.CookieStore;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContextBuilder;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
-import org.apache.http.impl.client.BasicCookieStore;
 import sdk.connection.ResponseCallback;
-import sdk.models.Book;
 import sdk.models.User;
 import sdk.services.BookService;
-
-
-import java.util.ArrayList;
 
 /**
  * Created by Daniel on 14-11-2016.
@@ -26,16 +17,23 @@ public class BookStore {
 
 
 
-        String username = "test";
-        user.setUsername(username);
+        String username = "student@cbs.dk";
+        user.setCbsMail(username);
 
-        String password = "1234";
-        user.setPassword(password);
+
+        String password = "cbs";
+
+        String doubleHashed = Digester.hashWithSalt(Digester.hashWithSalt(password));
+        user.setPassword(doubleHashed);
+
+        System.out.println(doubleHashed);
+
+        System.out.println("69015ed720025673825c03b1c1634f46");
 
 
         bookServices.login(user, new ResponseCallback<User>() {
             public void success(User data) {
-                System.out.println(data.getUsername());
+                System.out.println(data.getId());
             }
 
             public void error(int status) {
