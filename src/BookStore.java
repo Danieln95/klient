@@ -1,6 +1,12 @@
+import com.google.gson.reflect.TypeToken;
+import org.apache.http.client.methods.HttpGet;
+import sdk.connection.Connection;
 import sdk.connection.ResponseCallback;
+import sdk.connection.ResponseParser;
+import sdk.models.Lecture;
 import sdk.models.User;
 import sdk.services.BookService;
+import java.util.ArrayList;
 
 /**
  * Created by Daniel on 14-11-2016.
@@ -12,6 +18,7 @@ public class BookStore {
 
     public static void main(String[] args) throws Exception{
 
+        /*LOGIN***
         User user = new User();
         BookService bookServices = new BookService();
 
@@ -40,21 +47,9 @@ public class BookStore {
 
             }
         });
-
-    }
-/*
-    public void setSSL() {
-
-        try {
-            SSLContextBuilder builder = new SSLContextBuilder();
-            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-            this.ssl = new SSLConnectionSocketFactory(
-                    builder.build(), NoopHostnameVerifier.INSTANCE);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 */
+    }
+
     /*
     public static void main(String[] args) {
 

@@ -4,6 +4,7 @@ package sdk.view;
 import sdk.connection.ResponseCallback;
 import sdk.models.User;
 import sdk.services.BookService;
+import sdk.models.Review;
 
 import java.util.Scanner;
 

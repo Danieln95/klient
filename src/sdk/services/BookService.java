@@ -11,9 +11,13 @@ import sdk.connection.Connection;
 import sdk.connection.ResponseCallback;
 import sdk.connection.ResponseParser;
 import sdk.models.Lecture;
+import sdk.models.Review;
 import sdk.models.User;
+import sdk.models.Study;
+import sdk.models.Course;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /*
@@ -63,9 +67,33 @@ public class BookService {
 */
 
 
+/*
+K01 :​ Klient skal kunne logge ind og ud                                        (login) @POST
+K02 ​: Klient skal kunne skrive en kommentar til en lektioner                   (addReview) @POST
+K03 ​: Klient skal kunne se andres kommentarer og bedømmelser                   (getReviews) @GET
+K04 ​: Klient skal kunne bedømme lektioner (Rating og evt. kommentere)          Er det addReview?
+K05 ​: Klient skal kunne modtage lektioner fra serveren                         (getLectures) @GET
+K06 ​: Klient skal kunne se samlet deltagelse af lektion                        (getCourses) @GET
+K07 :​ Klient skal kunne slette egen kommentar                                  (deleteReview) @DELETE
+K08 ​: Klient (admin-bruger) skal kunne slette kommentarer                      Er det deleteReview?
+
+@GET
+getLectures K05
+getCourses  K06
+getReviews  K03
+
+@POST
+login       K01
+addReview   K02
+
+@DELETE
+deleteReview  K07
 
 
+--- HUSK AT TJEKKE API FOR ALLE ---
+ */
 
+//K01
     public void login(User user, final ResponseCallback<User> responseCallback) {
         try {
 
@@ -82,6 +110,7 @@ public class BookService {
                 }
 
                 public void error(int status) {
+
                     responseCallback.error(status);
                 }
             });
@@ -91,22 +120,36 @@ public class BookService {
         }
     }
 
+//K02
+    public void addReview(final ResponseCallback<ArrayList<Review>> responseCallback) {
+            HttpPost addReview = new HttpPost(Connection.serverURL + "/review");
+            postRequest.addHeader("Content-Type", "application/json");
+            StringEntity jsonReview = new StringEntity(gson.toJson(addReview));
+            postRequest.setEntity(jsonReview);
 
-
-    //Vi bruger void fordi lige så snart vi implementere det så er det ikke et getall vi implementere men koden
-    public void getAll(final ResponseCallback<ArrayList<Lecture>> responseCallback) {
-
-        HttpGet getRequest = new HttpGet(Connection.serverURL + "/books"); //Et get request til books, hvor vi sætter url til /books
-        this.connection.execute(getRequest, new ResponseParser() {
-
-            //2 metoder der kan kaldes efter om der sker fejl eller ej.
+        this.connection.execute(postRequest, new ResponseParser() {
             public void payload(String json) {
-
-                //typetoken anvendes fordi det ellers ikke forstår at den skal bruge book klassen
-                ArrayList<Lecture> books = gson.fromJson(json, new TypeToken<ArrayList<Lecture>>() {
-                }.getType());
-                responseCallback.success(books);
+                Review newReview = gson.fromJson(json, Review.class);
+                responseCallback.success(newReview);
             }
+
+            public void error(int status) {
+
+                responseCallback.error(status);
+            }
+        });
+    }
+
+//K03
+    public void getReviews(final ResponseCallback<ArrayList<Review>> responseCallback) {
+        HttpGet getRequest = new HttpGet(Connection.serverURL + "//review/{lectureId}");
+        this.connection.execute(getRequest, new ResponseParser() {
+            public void payload(String json) {
+                ArrayList<Review> reviews = gson.fromJson(json, new TypeToken<ArrayList<Lecture>>(){
+                }.getType());
+                responseCallback.success(reviews);
+            }
+
 
             public void error(int status) {
                 responseCallback.error(status);
@@ -115,4 +158,46 @@ public class BookService {
         });
 
     }
+
+//K04 PAS
+
+    //K05
+    public void getLectures(final ResponseCallback<ArrayList<Lecture>> responseCallback) {
+        HttpGet getRequest = new HttpGet(Connection.serverURL + "/lecture/{code}");
+        this.connection.execute(getRequest, new ResponseParser() {
+            public void payload(String json) {
+                ArrayList<Lecture> lectures = gson.fromJson(json, new TypeToken<ArrayList<Lecture>>() {
+
+                }.getType());
+                responseCallback.success(lectures);
+            }
+
+            public void error(int status) {
+            responseCallback.error(status);
+            }
+        });
+
+    }
+
+//K06
+        public void getCourses(final ResponseCallback<ArrayList<Course>> responseCallback) {
+            HttpGet getRequest = new HttpGet(Connection.serverURL + "/course/{userId}");
+            this.connection.execute(getRequest, new ResponseParser() {
+                //2 metoder der kan kaldes efter om der sker fejl eller ej.
+            public void payload(String json) {
+                //typetoken anvendes fordi det ellers ikke forstår at den skal bruge Lecture klassen
+                ArrayList<Course> courses = gson.fromJson(json, new TypeToken<ArrayList<Course>>() {
+                }.getType());
+                responseCallback.success(courses);
+            }
+
+            public void error(int status) {
+                responseCallback.error(status);
+            }
+        });
+    }
+
+
+
 }
+
