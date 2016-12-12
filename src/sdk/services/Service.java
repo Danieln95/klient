@@ -2,7 +2,6 @@ package sdk.services;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -20,62 +19,27 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-/*
- - Update book
- - Delete book
- - Create book
- - Get all
-*/
 
-public class BookService {
+public class Service {
 
     //Vi skal have fat i vores connection object
     private Connection connection;
     private Gson gson;
 
-    public BookService() {
+    public Service() {
         this.connection = new Connection();
         this.gson = new Gson();
     }
-
-    /*
-    public void update(String id, Book book, final ResponseCallback<Book> responseCallback) {
-        try {
-            HttpPut putRequest = new HttpPut(Connection.serverURL + "/books/" + id);
-            putRequest.addHeader("Content-Type", "application/json");
-            putRequest.addHeader("authorization", "81dc9bdb52d04dc20036dbd8313ed055");
-
-            StringEntity jsonBook = new StringEntity(gson.toJson(book));
-            putRequest.setEntity(jsonBook);
-
-            connection.execute(putRequest, new ResponseParser() {
-
-                public void payload(String json) {
-                    Book updatedBook = gson.fromJson(json, Book.class);
-                    responseCallback.success(updatedBook);
-                }
-
-                public void error(int status) {
-                    responseCallback.error(status);
-                }
-            });
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-*/
-
 
 /*
 K01 :​ Klient skal kunne logge ind og ud                                        (login) @POST
 K02 ​: Klient skal kunne skrive en kommentar til en lektioner                   (addReview) @POST
 K03 ​: Klient skal kunne se andres kommentarer og bedømmelser                   (getReviews) @GET
-K04 ​: Klient skal kunne bedømme lektioner (Rating og evt. kommentere)          Er det addReview?
+K04 ​: Klient skal kunne bedømme lektioner (Rating og evt. kommentere)          (addReview) @POST
 K05 ​: Klient skal kunne modtage lektioner fra serveren                         (getLectures) @GET
 K06 ​: Klient skal kunne se samlet deltagelse af lektion                        (getCourses) @GET
-K07 :​ Klient skal kunne slette egen kommentar                                  (deleteReview) @DELETE
-K08 ​: Klient (admin-bruger) skal kunne slette kommentarer                      Er det deleteReview?
+K07 :​ Klient skal kunne slette egen kommentar                                  (deleteReview) @PUT
+K08 ​: Klient (admin-bruger) skal kunne slette kommentarer                      (deleteReview) @PUT men sletter hele reviewet, hvilket ikke var meningen men at den bare skulle slette kommentaren.
 
 @GET
 getLectures K05
@@ -84,17 +48,19 @@ getReviews  K03
 
 @POST
 login       K01
-addReview   K02
+addReview   K02, K04
 
-@DELETE
-deleteReview  K07
+@PUT
+deleteReview  K07, K08
 
 
 --- HUSK AT TJEKKE API FOR ALLE ---
  */
 
+
+
 //K01
-    public void login(User user, final ResponseCallback<User> responseCallback) {
+    public void login(User user , final ResponseCallback<User> responseCallback) {
         try {
 
             HttpPost postRequest = new HttpPost(Connection.serverURL + "/login");
@@ -121,24 +87,30 @@ deleteReview  K07
     }
 
 //K02
-    public void addReview(final ResponseCallback<ArrayList<Review>> responseCallback) {
-            HttpPost addReview = new HttpPost(Connection.serverURL + "/review");
-            postRequest.addHeader("Content-Type", "application/json");
-            StringEntity jsonReview = new StringEntity(gson.toJson(addReview));
-            postRequest.setEntity(jsonReview);
+    public void addReview(Review review , final ResponseCallback<Review> responseCallback) {
+        try {
 
-        this.connection.execute(postRequest, new ResponseParser() {
-            public void payload(String json) {
-                Review newReview = gson.fromJson(json, Review.class);
-                responseCallback.success(newReview);
-            }
+            HttpPost postReview = new HttpPost(Connection.serverURL + "/student/review");
+            postReview.addHeader("Content-Type", "application/json");
+            StringEntity jsonReview = new StringEntity(gson.toJson(review));
+            postReview.setEntity(jsonReview);
 
-            public void error(int status) {
+            this.connection.execute(postReview, new ResponseParser() {
+                public void payload(String json) {
+                    Review newReview = gson.fromJson(json, Review.class);
+                    responseCallback.success(newReview);
+                }
 
-                responseCallback.error(status);
-            }
-        });
+                public void error(int status) {
+
+                    responseCallback.error(status);
+                }
+            });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
+
 
 //K03
     public void getReviews(final ResponseCallback<ArrayList<Review>> responseCallback) {
@@ -159,7 +131,10 @@ deleteReview  K07
 
     }
 
-//K04 PAS
+//K04 - Samme som K02
+
+
+
 
     //K05
     public void getLectures(final ResponseCallback<ArrayList<Lecture>> responseCallback) {
@@ -197,7 +172,36 @@ deleteReview  K07
         });
     }
 
+//K07
+    public void deleteReview(Review review , final ResponseCallback<Review> responseCallback) {
+
+        try {
+
+            HttpPut putRequest = new HttpPut(Connection.serverURL + "/review/");
+            putRequest.addHeader("Content-Type", "application/json");
+            StringEntity jsonReview = new StringEntity(gson.toJson(review));
+            putRequest.setEntity(jsonReview);
+
+            this.connection.execute(putRequest, new ResponseParser() {
+                public void payload(String json) {
+                    Review deleteReview = gson.fromJson(json, Review.class);
+                    responseCallback.success(deleteReview);
+                }
+
+                public void error(int status) {
+
+                    responseCallback.error(status);
+                }
+            });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //K08 - Kopieres fra K07
+
+    }
 
 
-}
+
 

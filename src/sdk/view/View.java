@@ -3,7 +3,7 @@ package sdk.view;
 
 import sdk.connection.ResponseCallback;
 import sdk.models.User;
-import sdk.services.BookService;
+import sdk.services.Service;
 import sdk.models.Review;
 
 import java.util.Scanner;
@@ -15,9 +15,9 @@ import java.util.Scanner;
  */
 public class View {
     Scanner input;
-    private BookService service;
+    private Service service;
 
-    public View(BookService service) {
+    public View(Service service) {
         input = new Scanner(System.in);
         this.service = service;
 
@@ -25,7 +25,7 @@ public class View {
     }
 
     public static void main(String[] args) {
-        BookService service = new BookService();
+        Service service = new Service();
         View view = new View(service);
         view.login();
     }
