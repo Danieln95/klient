@@ -41,17 +41,27 @@ K06 ​: Klient skal kunne se samlet deltagelse af lektion                      
 K07 :​ Klient skal kunne slette egen kommentar                                  (deleteReview) @PUT
 K08 ​: Klient (admin-bruger) skal kunne slette kommentarer                      (deleteReview) @PUT men sletter hele reviewet, hvilket ikke var meningen men at den bare skulle slette kommentaren.
 
-@GET
+@GET - WORKS
 getLectures K05
 getCourses  K06
 getReviews  K03
 
-@POST
+@POST - WORKS
 login       K01
 addReview   K02, K04
 
 @PUT
 deleteReview  K07, K08
+
+_________________________
+
+Testet og Virker
+    -Login
+    -getLecture
+    -getCourses
+    -getReviews
+    -addReview
+
 
 
 --- HUSK AT TJEKKE API FOR ALLE ---
@@ -113,11 +123,11 @@ deleteReview  K07, K08
 
 
 //K03
-    public void getReviews(final ResponseCallback<ArrayList<Review>> responseCallback) {
-        HttpGet getRequest = new HttpGet(Connection.serverURL + "//review/{lectureId}");
+    public void getReviews(Integer lectureId , final ResponseCallback<ArrayList<Review>> responseCallback) {
+        HttpGet getRequest = new HttpGet(Connection.serverURL + "/review/" + lectureId);
         this.connection.execute(getRequest, new ResponseParser() {
             public void payload(String json) {
-                ArrayList<Review> reviews = gson.fromJson(json, new TypeToken<ArrayList<Lecture>>(){
+                ArrayList<Review> reviews = gson.fromJson(json, new TypeToken<ArrayList<Review>>(){
                 }.getType());
                 responseCallback.success(reviews);
             }
@@ -137,8 +147,8 @@ deleteReview  K07, K08
 
 
     //K05
-    public void getLectures(final ResponseCallback<ArrayList<Lecture>> responseCallback) {
-        HttpGet getRequest = new HttpGet(Connection.serverURL + "/lecture/{code}");
+    public void getLectures(Integer courseId, final ResponseCallback<ArrayList<Lecture>> responseCallback) {
+        HttpGet getRequest = new HttpGet(Connection.serverURL + "/lecture/" + courseId);
         this.connection.execute(getRequest, new ResponseParser() {
             public void payload(String json) {
                 ArrayList<Lecture> lectures = gson.fromJson(json, new TypeToken<ArrayList<Lecture>>() {
@@ -155,8 +165,8 @@ deleteReview  K07, K08
     }
 
 //K06
-        public void getCourses(final ResponseCallback<ArrayList<Course>> responseCallback) {
-            HttpGet getRequest = new HttpGet(Connection.serverURL + "/course/{userId}");
+        public void getCourses(Integer id, final ResponseCallback<ArrayList<Course>> responseCallback) {
+            HttpGet getRequest = new HttpGet(Connection.serverURL + "/course/" + id);
             this.connection.execute(getRequest, new ResponseParser() {
                 //2 metoder der kan kaldes efter om der sker fejl eller ej.
             public void payload(String json) {
@@ -177,7 +187,7 @@ deleteReview  K07, K08
 
         try {
 
-            HttpPut putRequest = new HttpPut(Connection.serverURL + "/review/");
+            HttpPut putRequest = new HttpPut(Connection.serverURL + "/student/review/");
             putRequest.addHeader("Content-Type", "application/json");
             StringEntity jsonReview = new StringEntity(gson.toJson(review));
             putRequest.setEntity(jsonReview);
