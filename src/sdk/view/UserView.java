@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Created by kknhd on 10-12-2016.
+ * Created by Daniel on 10-12-2016.
  */
 
 
@@ -34,7 +34,7 @@ public class UserView {
     public void userMenu() {
 
 
-        System.out.println("Welcome to UserMenu");
+        System.out.println("Welcome to the user menu. You have following choices: \n");
         System.out.println("(1) -  Get lectures");
         System.out.println("(2) -  Get courses");
         System.out.println("(3) -  Get review");
@@ -44,9 +44,13 @@ public class UserView {
 
 
         int choice = input.nextInt();
+
+        /* Switch case menu for valgmuligheder som en user*/
         switch (choice) {
 
             case 1:
+
+                //Opretter en instans som skal bruges senere
                 Lecture lectureToGet = new Lecture();
 
                 System.out.println("Course ID:");
@@ -73,13 +77,8 @@ public class UserView {
 
             case 2:
 
-                Course courseToGet = new Course();
 
-                System.out.println("User ID:");
-                int userId = input.nextInt();
-                courseToGet.getId();
-
-                service.getCourses(userId, new ResponseCallback<ArrayList<Course>>() {
+                service.getCourses(user.getId(), new ResponseCallback<ArrayList<Course>>() {
                     public void success(ArrayList<Course> data) {
                         for (Course course : data) {
                             System.out.println("You are attending: ");
@@ -158,17 +157,17 @@ public class UserView {
 
             case 5:
 
-                Review review = new Review();
+                Review reviewToDelete = new Review();
 
 
                 System.out.println("Type Review ID");
                 int id = input.nextInt();
-                review.setId(id);
+                reviewToDelete.setId(id);
 
-                review.setUserId(user.getId());
+                reviewToDelete.setUserId(user.getId());
 
 
-                service.deleteReview(review, new ResponseCallback<Review>() {
+                service.deleteReview(reviewToDelete, new ResponseCallback<Review>() {
                     public void success(Review data) {
                         System.out.println("Review deleted");
                         System.out.println();
@@ -179,7 +178,6 @@ public class UserView {
 
                     }
                 });
-
 
                 break;
 

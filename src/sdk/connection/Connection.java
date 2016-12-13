@@ -40,7 +40,7 @@ public class Connection {
     };
 
     try {
-      //returnere vores json til klienten
+      //Returning JSON to client
       String json = this.httpClient.execute(uriRequest, responseHandler);
       parser.payload(json);
 
