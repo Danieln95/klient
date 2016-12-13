@@ -5,6 +5,20 @@ import sdk.connection.ResponseCallback;
 import sdk.models.User;
 import sdk.services.Service;
 import sdk.models.Review;
+import com.google.gson.reflect.TypeToken;
+import org.apache.http.client.methods.HttpGet;
+import sdk.connection.Connection;
+import sdk.connection.ResponseCallback;
+import sdk.connection.ResponseParser;
+import sdk.models.Course;
+import sdk.models.Lecture;
+import sdk.models.Review;
+import sdk.models.User;
+import sdk.services.Service;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import java.util.Scanner;
 
@@ -30,39 +44,35 @@ public class View {
         view.login();
     }
 
-    private void login() {
+    public void login() {
 
+        Service service = new Service();
+        User user = new User();
 
         System.out.println("Velkommen til undervisningsevaluering");
         System.out.println("Indtast venligst brugernavn og adgangskode");
 
 
-        User user = new User();
+        System.out.println("Username");
+        String cbsMail = input.next();
+        user.setCbsMail(cbsMail);
 
-
-        System.out.println("\nBrugernavn: ");
-        String username = input.next();
-
-        user.setCbsMail(username);
-        System.out.println("\nPassword: ");
+        System.out.println("Password");
         String password = input.next();
-        user.setPassword(password);
-
+        String doubleHashed = Digester.hashWithSalt(Digester.hashWithSalt(password));
+        user.setPassword(doubleHashed);
 
         service.login(user, new ResponseCallback<User>() {
             public void success(User data) {
-                System.out.print("yes");
-                System.out.println(data.getCbsMail());
+                System.out.println(data.getId());
             }
 
             public void error(int status) {
-                System.out.printf("status");
-
+                System.out.println(status);
             }
         });
 
-
-}
+    }
 
 }
 /*

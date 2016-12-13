@@ -18,6 +18,7 @@ import sdk.models.Course;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Service {
@@ -50,7 +51,7 @@ getReviews  K03
 login       K01
 addReview   K02, K04
 
-@PUT
+@PUT - WORKS
 deleteReview  K07, K08
 
 _________________________
@@ -61,8 +62,15 @@ Testet og Virker
     -getCourses
     -getReviews
     -addReview
+    -deleteReview
 
+________________________
 
+TUI:
+    -addReview
+    -getReview
+    -getLecture
+    -getCourses
 
 --- HUSK AT TJEKKE API FOR ALLE ---
  */
@@ -98,9 +106,11 @@ Testet og Virker
 
 //K02
     public void addReview(Review review , final ResponseCallback<Review> responseCallback) {
+
         try {
 
             HttpPost postReview = new HttpPost(Connection.serverURL + "/student/review");
+
             postReview.addHeader("Content-Type", "application/json");
             StringEntity jsonReview = new StringEntity(gson.toJson(review));
             postReview.setEntity(jsonReview);
@@ -119,6 +129,7 @@ Testet og Virker
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
     }
 
 

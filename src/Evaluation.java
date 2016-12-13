@@ -19,18 +19,24 @@ import java.util.Scanner;
 public class Evaluation {
 
     Scanner input;
-    private Service service;
 
-    public Evaluation(Service service) {
+    public Evaluation() {
 
         input = new Scanner(System.in);
-        this.service = service;
 
     }
 
     public static void main(String[] args) {
 
-        Service service = new Service();
+        Evaluation evaluation = new Evaluation();
+        evaluation.deleteReview();
+
+
+
+
+
+
+
 
 
         /* ----------TEST AF ADD REVIEW--------- VIRKER
@@ -102,7 +108,7 @@ public class Evaluation {
 
 
 
-//---------------TEST AF DELETE REVIEWS-------------- Virker ikke...
+/*---------------TEST AF DELETE REVIEWS-------------- WORKS
         Review review = new Review();
         review.setId(1);
         review.setUserId(2);
@@ -119,29 +125,62 @@ public class Evaluation {
 
     }
 
-/*
-        public void addReview() {
+*/
+    }
+
+
+
+public void login() {
+    Service service = new Service();
+
+    User user = new User();
+
+    System.out.println("Username");
+    String cbsMail = input.next();
+    user.setCbsMail(cbsMail);
+
+    System.out.println("Password");
+    String password = input.next();
+    String doubleHashed = Digester.hashWithSalt(Digester.hashWithSalt(password));
+    user.setPassword(doubleHashed);
+
+    service.login(user, new ResponseCallback<User>() {
+        public void success(User data) {
+            System.out.println(data.getId());
+        }
+
+        public void error(int status) {
+            System.out.println(status);
+        }
+    });
+
+}
+
+
+
+    public void addReview() {
+        Service service = new Service();
 
         Review reviewToCreate = new Review();
 
-        System.out.println("Indtast ID");
+        System.out.println("ID");
         int id = input.nextInt();
         reviewToCreate.setId(id);
 
-        System.out.println("Indtast userID");
+        System.out.println("User ID");
         int userId = input.nextInt();
         reviewToCreate.setUserId(userId);
 
-        System.out.println("Indtast lectureID");
+        System.out.println("Lecture ID");
         int lectureId = input.nextInt();
         reviewToCreate.setLectureId(lectureId);
 
-        System.out.println("Indtast rating");
+        System.out.println("Rate from 1 to 5");
         int rating = input.nextInt();
         reviewToCreate.setRating(rating);
 
-        System.out.println("Indtast comment");
-        String comment = input.nextLine();
+        System.out.println("Comment on the review");
+        String comment = input.next();
         reviewToCreate.setComment(comment);
 
         service.addReview(reviewToCreate, new ResponseCallback<Review>() {
@@ -153,19 +192,51 @@ public class Evaluation {
                 System.out.println(status);
             }
         });
+    }
 
-/*
-        public void getReviews() {
 
+    public void getReviews() {
+
+        Service service = new Service();
         Review reviewToGet = new Review();
 
-        System.out.println("Indtast ID på ønsket review");
-        int id = input.nextInt();
-        reviewToGet.getId();
+        System.out.println("Lecture ID:");
+        int lectureId = input.nextInt();
+        reviewToGet.getLectureId();
 
-        service.getReviews(reviewToGet, new ResponseCallback<ArrayList<Review>>() {
-            public void success(Review data) {
-                System.out.println(Review);
+        service.getReviews(lectureId, new ResponseCallback<ArrayList<Review>>() {
+            public void success(ArrayList<Review> data) {
+                for (Review review : data) {
+                    System.out.println(review.getComment());
+                    System.out.println(review.getRating());
+                }
+            }
+
+            public void error(int status) {
+                System.out.println(status);
+            }
+
+        });
+    }
+
+
+    public void getLectures() {
+
+        Service service = new Service();
+        Lecture lectureToGet = new Lecture();
+
+        System.out.println("Course ID:");
+        int courseId = input.nextInt();
+        lectureToGet.getCourseId();
+
+        service.getLectures(courseId, new ResponseCallback<ArrayList<Lecture>>() {
+            public void success(ArrayList<Lecture> data) {
+                for (Lecture lecture : data) {
+                    System.out.println(lecture.getStartDate());
+                    System.out.println(lecture.getStart());
+                    System.out.println(lecture.getDescription());
+                    System.out.println(lecture.getLocation());
+                }
             }
 
             public void error(int status) {
@@ -173,62 +244,62 @@ public class Evaluation {
             }
         });
     }
-*/
 
-/*
-        public void deleteReview() {
-            Review reviewToDelete = new Review();
+    public void getCourses() {
 
-        System.out.println("ID på review der skal slettes");
-        int id = input.nextInt();
-        reviewToDelete.setId(id);
+        Service service = new Service();
+        Course courseToGet = new Course();
 
-            service.deleteReview(reviewToDelete, new ResponseCallback<Review>() {
-                public void success(Review data) {
-                    System.out.println("Reviewet er nu slettet");
+        System.out.println("User ID:");
+        int userId = input.nextInt();
+        courseToGet.getId();
+
+        service.getCourses(userId, new ResponseCallback<ArrayList<Course>>() {
+            public void success(ArrayList<Course> data) {
+                for (Course course : data) {
+                    System.out.println(course.getDisplaytext());
+
                 }
-
-                public void error(int status) {
-                    System.out.println("status");
-                }
-            });
-
-    }
-*/
-
-
-
-        /*LOGIN***
-        User user = new User();
-        BookService bookServices = new BookService();
-
-
-
-        String username = "student@cbs.dk";
-        user.setCbsMail(username);
-
-
-        String password = "cbs";
-
-        String doubleHashed = Digester.hashWithSalt(Digester.hashWithSalt(password));
-        user.setPassword(doubleHashed);
-
-        System.out.println(doubleHashed);
-
-        System.out.println("69015ed720025673825c03b1c1634f46");
-
-
-        bookServices.login(user, new ResponseCallback<User>() {
-            public void success(User data) {
-                System.out.println(data.getId());
             }
 
             public void error(int status) {
-
+                System.out.println(status);
             }
         });
-*/
     }
+
+
+    public void deleteReview() {
+        Service service = new Service();
+        Review review = new Review();
+
+        System.out.println("Type ID");
+        int id = input.nextInt();
+        review.setId(id);
+
+        System.out.println("Type User ID");
+        int userId = input.nextInt();
+        review.setUserId(userId);
+
+        service.deleteReview(review, new ResponseCallback<Review>() {
+            public void success(Review data) {
+                System.out.println("Review deleted");
+            }
+
+            public void error(int status) {
+                System.out.println(status);
+            }
+        });
+
+    }
+
+    }
+
+
+
+
+
+
 
 
 
