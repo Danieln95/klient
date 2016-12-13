@@ -82,7 +82,6 @@ TUI:
         try {
 
             HttpPost postRequest = new HttpPost(Connection.serverURL + "/login");
-            System.out.println(Connection.serverURL + "/login");
             postRequest.addHeader("Content-Type", "application/json");
             StringEntity jsonUser = new StringEntity(gson.toJson(user));
             postRequest.setEntity(jsonUser);
@@ -118,8 +117,8 @@ TUI:
             this.connection.execute(postReview, new ResponseParser() {
                 public void payload(String json) {
                     Review newReview = gson.fromJson(json, Review.class);
-                    responseCallback.success(newReview);
-                }
+                   responseCallback.success(newReview);
+               }
 
                 public void error(int status) {
 

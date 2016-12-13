@@ -3,6 +3,7 @@ package sdk.view;
 
 import sdk.connection.ResponseCallback;
 import sdk.models.User;
+import sdk.security.Digester;
 import sdk.services.Service;
 import sdk.models.Review;
 import com.google.gson.reflect.TypeToken;
@@ -32,86 +33,62 @@ public class View {
     private Service service;
 
     public View(Service service) {
-        input = new Scanner(System.in);
         this.service = service;
-
-        login();
     }
 
-    public static void main(String[] args) {
-        Service service = new Service();
-        View view = new View(service);
-        view.login();
-    }
+    public void mainMenu() {
 
-    public void login() {
+        System.out.println("Welcome to Evaluation");
+        System.out.println("(1) -  Login");
+        System.out.println("(2) -  Exit");
 
-        Service service = new Service();
-        User user = new User();
+        input = new Scanner(System.in);
+        int choice = input.nextInt();
 
-        System.out.println("Velkommen til undervisningsevaluering");
-        System.out.println("Indtast venligst brugernavn og adgangskode");
+        switch (choice) {
 
+            case 1:
+                User user = new User();
 
-        System.out.println("Username");
-        String cbsMail = input.next();
-        user.setCbsMail(cbsMail);
+                System.out.println("Username");
+                String cbsMail = input.next();
+                user.setCbsMail(cbsMail);
 
-        System.out.println("Password");
-        String password = input.next();
-        String doubleHashed = Digester.hashWithSalt(Digester.hashWithSalt(password));
-        user.setPassword(doubleHashed);
+                System.out.println("Password");
+                String password = input.next();
+                String doubleHashed = Digester.hashWithSalt(Digester.hashWithSalt(password));
+                user.setPassword(doubleHashed);
 
-        service.login(user, new ResponseCallback<User>() {
-            public void success(User data) {
-                System.out.println(data.getId());
-            }
+                service.login(user, new ResponseCallback<User>() {
+                    public void success(User data) {
+                        UserView userview = new UserView(service, data);
 
-            public void error(int status) {
-                System.out.println(status);
-            }
-        });
+                        userview.userMenu();
+
+                    }
+
+                    public void error(int status) {
+                        System.out.println(status);
+                    }
+                });
+                break;
+
+            case 2:
+                System.out.println("Have a nice day");
+                System.exit(0);
+
+                break;
+
+            default:
+
+                break;
+        }
+
 
     }
 
 }
-/*
-    private void createBook() {
 
-        System.out.println("Create book is running");
-
-        Book bookToCreate = new Book();
-
-
-        System.out.println("Indtast bogens ISBN");
-        Long isbn = input.nextLong();
-        bookToCreate.setIsbn(isbn);
-
-
-        System.out.println("Indtast bogens titel");
-        String title = input.next();
-        bookToCreate.setTitle(title);
-
-        System.out.println("Indtast bogens version");
-        String edition = input.next();
-        bookToCreate.setEdition(edition);
-
-        System.out.println("Indtast bogens forfatter eller forfattere");
-        String author = input.next();
-        bookToCreate.setAuthor(author);
-
-        bookServices.create(bookToCreate, new ResponseCallback<Book>() {
-
-            public void success(Book data) {
-                System.out.println("Book created");
-            }
-
-
-            public void error(int status) {
-                System.out.println(status);
-            }
-        });
-*/
 
 
 
