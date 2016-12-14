@@ -32,9 +32,20 @@ public class View {
     Scanner input;
     private Service service;
 
+    /**
+     *
+     * @param service
+     * View constructor, taking Service as parameter.
+     */
+
     public View(Service service) {
         this.service = service;
     }
+
+    /**
+     * This is the main menu. The user has 2 opportunities. Either login, or exit.
+     * This is registred with the help of an imported scanner and a switch case, checking for inputs.
+     */
 
     public void mainMenu() {
 
@@ -46,7 +57,14 @@ public class View {
         int choice = input.nextInt();
 
         switch (choice) {
-
+/**
+ * The first case is login. First the user input the username, which from the server is programmed into being the cbs
+ * mail. The password is then provided by the user. But as a security measurement this will then have to be double
+ * hashed with salt. After this, the application will check for a match with the given cbs mail.
+ *
+ * If these are a match, the success method will run, letting the user go to user menu in the UserView class.
+ * If these are mismatching, it will return an error code.
+ */
             case 1:
                 User user = new User();
 
@@ -68,20 +86,19 @@ public class View {
                     }
 
                     public void error(int status) {
-                        System.out.println(status);
+                        System.out.println("Error code: " + status);
                     }
                 });
                 break;
-
+/**
+ * The second case is exit. This will print a message and call for system.exit, and therefore stopping the application.
+ */
             case 2:
                 System.out.println("Have a nice day");
                 System.exit(0);
 
                 break;
 
-            default:
-
-                break;
         }
 
 

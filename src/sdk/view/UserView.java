@@ -18,8 +18,8 @@ import java.util.Scanner;
 
 public class UserView {
 
-    private Service service;
     Scanner input;
+    private Service service;
     private User user;
 
     public UserView(Service service, User user) {
@@ -30,6 +30,11 @@ public class UserView {
 
     }
 
+    /**
+     * The user menu is the only menu in the application. From here the user can select several methods that
+     * the application can run. This is done with a switch case, that reads input from the user through the
+     * scanner import
+     */
 
     public void userMenu() {
 
@@ -42,14 +47,21 @@ public class UserView {
         System.out.println("(5) -  Delete review");
         System.out.println("(6) -  Log out");
 
-
+            /**
+            * Integer variable used to read the user input from the imported scanner.
+             */
         int choice = input.nextInt();
 
-        /* Switch case menu for valgmuligheder som en user*/
         switch (choice) {
 
+            /**
+             * First case is get lectures. The user is told to put in the course id, the scanner then reads the input
+             * and checks if the input exist in the database. Either it is a success, or failure (error).
+             * Success will then list the lectures start time and the description of the lecture.  It will then return
+             * to the userMenu.
+             *
+             */
             case 1:
-
                 //Opretter en instans som skal bruges senere
                 Lecture lectureToGet = new Lecture();
 
@@ -75,6 +87,12 @@ public class UserView {
 
                 break;
 
+            /**
+             * The second case is get courses. It reads the users id and match it with the data in the MySQL database.
+             * if there's a match, the application is printing a list with the name of the course and course id that
+             * the given user is attending. Then returning to user menu.
+             */
+
             case 2:
 
 
@@ -96,7 +114,11 @@ public class UserView {
 
 
                 break;
-
+            /**
+             * Third case is the get review method. From here the user will enter a lecture id. The scanner will then read the input
+            * and check for success or error in the database. If there's a match it will print comment and rating on the given
+            * lecture id. Then returning to user menu.
+            */
             case 3:
 
                 Review reviewToGet = new Review();
@@ -122,7 +144,13 @@ public class UserView {
                 });
 
                 break;
-
+            /**
+            * The fourth case is create review. The user has the opportunity to create a review. First the users id is set
+            * automatically. Then the user is told to give several inputs that the imported scanner reads. If the review can
+             * be created, the success method will run. From here the user will be aware of the fact that he or shes review is
+             * created.
+            *
+            */
             case 4:
 
                 Review reviewToCreate = new Review();
@@ -155,6 +183,12 @@ public class UserView {
 
                 break;
 
+            /**
+             * The fifth case is used when a user want to delete a review. The user input a review id that it want to
+             * delete. If this review ID is made by the same user id as the given user has, the success method will run.
+             * It display a message for the user, making aware that the review is deleted. Then returns to user menu.
+             */
+
             case 5:
 
                 Review reviewToDelete = new Review();
@@ -181,6 +215,10 @@ public class UserView {
 
                 break;
 
+            /**
+             * The sixth case is simply a simulation of "logout", as it return to main menu without anything else. And therefore
+            * returns to a switch case with 2 cases. log in or exit.
+            */
             case 6:
                 System.out.println();
                 View view = new View(service);
@@ -189,9 +227,6 @@ public class UserView {
 
                 break;
 
-            default:
-
-                break;
 
         }
     }

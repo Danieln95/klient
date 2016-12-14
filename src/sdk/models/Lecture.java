@@ -7,6 +7,11 @@ import java.util.List;
 /**
  * Created by kknhd on 02-12-2016.
  */
+
+/**
+ * The model classes all has variables and getters/setters for given variables.
+ * These are matching the server DTOs.
+ */
 public class Lecture {
 
     private int id;

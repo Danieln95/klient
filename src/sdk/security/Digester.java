@@ -6,11 +6,13 @@ import sun.misc.BASE64Encoder;
 import java.io.IOException;
 import java.security.MessageDigest;
 
-//TODO: Comments and documentation needed.
+
 
 public class Digester {
 
-    //TODO: Set SALT and KEY in config-file.
+    /**
+     * Declaring the salt and key variables.
+     */
     private final static String SALT = "n0zaCTADRUuTb@JUp01n%5@(l@IAaLlZ";
     private final static String KEY = "40674244454045cb9a70040a30e1c007";
     private static MessageDigest digester;
@@ -31,7 +33,12 @@ public class Digester {
      * @return MD5 hash of string
      */
 
-    //Hashing påbegyndes
+    /**
+     *
+     * @param str
+     * @return
+     * Hashing begins.
+     */
     public static String hash(String str) {
         if (str == null || str.length() == 0) {
             throw new IllegalArgumentException("Error");
@@ -39,7 +46,13 @@ public class Digester {
         return Digester._hash(str);
     }
 
-    //Hashing + SALT påbegyndes
+    /**
+     *
+     * @param str
+     * @return
+     * Hash with salt begins.
+     *
+     */
     public static String hashWithSalt(String str){
         if (str == null || str.length() == 0) {
             throw new IllegalArgumentException("Error");
@@ -49,7 +62,11 @@ public class Digester {
 
         return Digester._hash(str);
     }
-    //konventerer hashværdien til hexidecimaler
+
+    /**
+     * Converting hash values into hexadecimal.
+     */
+
     private static String _hash(String str){
         digester.update(str.getBytes());
         byte[] hash = digester.digest();
@@ -84,7 +101,7 @@ public class Digester {
         return decrypted_string;
     }
 
-    //
+
     private static byte[] xorWithKey(byte[] a, byte[] key) {
         byte[] out = new byte[a.length];
         for (int i = 0; i < a.length; i++) {
@@ -93,7 +110,12 @@ public class Digester {
         return out;
     }
 
-    //Metode til at dekryptering
+    /**
+     *
+     * @param s
+     * @return
+     * Method to decrypt
+     */
     private static byte[] base64Decode(String s) {
         try {
             BASE64Decoder d = new BASE64Decoder();
