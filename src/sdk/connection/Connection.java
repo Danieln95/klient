@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class Connection {
     /**
-     * First of all I need to declare the serverURL and that I am using it as a http client.
+     * First of all I need to declare the serverURL and that I am using it as a http client. To establish a connection
+     * to the server.
      */
     public static String serverURL = "http://localhost:5000/api";
     private CloseableHttpClient httpClient;
