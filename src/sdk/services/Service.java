@@ -12,13 +12,10 @@ import sdk.connection.ResponseParser;
 import sdk.models.Lecture;
 import sdk.models.Review;
 import sdk.models.User;
-import sdk.models.Study;
 import sdk.models.Course;
-
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 /**
  * Some of the code below is repeated in different methods. The code will only be commented once

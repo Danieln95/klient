@@ -2,7 +2,6 @@ package sdk.security;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
-
 import java.io.IOException;
 import java.security.MessageDigest;
 
@@ -34,10 +33,8 @@ public class Digester {
      */
 
     /**
-     *
      * @param str
-     * @return
-     * Hashing begins.
+     * @return Hashing begins.
      */
     public static String hash(String str) {
         if (str == null || str.length() == 0) {
@@ -47,13 +44,10 @@ public class Digester {
     }
 
     /**
-     *
      * @param str
-     * @return
-     * Hash with salt begins.
-     *
+     * @return Hash with salt begins.
      */
-    public static String hashWithSalt(String str){
+    public static String hashWithSalt(String str) {
         if (str == null || str.length() == 0) {
             throw new IllegalArgumentException("Error");
         }
@@ -67,7 +61,7 @@ public class Digester {
      * Converting hash values into hexadecimal.
      */
 
-    private static String _hash(String str){
+    private static String _hash(String str) {
         digester.update(str.getBytes());
         byte[] hash = digester.digest();
         StringBuffer hexString = new StringBuffer();
@@ -81,12 +75,13 @@ public class Digester {
         return hexString.toString();
     }
 
+
     public static String encrypt(String s) {
 
         String encrypted_string = s;
 
 
-            encrypted_string = base64Encode(xorWithKey(encrypted_string.getBytes(), KEY.getBytes()));
+        encrypted_string = base64Encode(xorWithKey(encrypted_string.getBytes(), KEY.getBytes()));
 
         return encrypted_string;
     }
@@ -96,7 +91,7 @@ public class Digester {
         String decrypted_string = s;
 
 
-            decrypted_string = new String(xorWithKey(base64Decode(s), KEY.getBytes()));
+        decrypted_string = new String(xorWithKey(base64Decode(s), KEY.getBytes()));
 
         return decrypted_string;
     }
@@ -105,22 +100,23 @@ public class Digester {
     private static byte[] xorWithKey(byte[] a, byte[] key) {
         byte[] out = new byte[a.length];
         for (int i = 0; i < a.length; i++) {
-            out[i] = (byte) (a[i] ^ key[i%key.length]);
+            out[i] = (byte) (a[i] ^ key[i % key.length]);
         }
         return out;
     }
 
     /**
-     *
      * @param s
-     * @return
-     * Method to decrypt
+     * @return Method to decrypt
      */
+
     private static byte[] base64Decode(String s) {
         try {
             BASE64Decoder d = new BASE64Decoder();
             return d.decodeBuffer(s);
-        } catch (IOException e) {throw new RuntimeException(e);}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //metode til kryptering
@@ -130,3 +126,4 @@ public class Digester {
 
     }
 }
+

@@ -2,7 +2,7 @@ import sdk.services.Service;
 import sdk.view.View;
 
 /**
- * Created by kknhd on 13-12-2016.
+ * Created by Daniel on 13-12-2016.
  */
 public class Main {
     /**

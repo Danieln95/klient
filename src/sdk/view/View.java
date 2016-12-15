@@ -5,23 +5,8 @@ import sdk.connection.ResponseCallback;
 import sdk.models.User;
 import sdk.security.Digester;
 import sdk.services.Service;
-import sdk.models.Review;
-import com.google.gson.reflect.TypeToken;
-import org.apache.http.client.methods.HttpGet;
-import sdk.connection.Connection;
-import sdk.connection.ResponseCallback;
-import sdk.connection.ResponseParser;
-import sdk.models.Course;
-import sdk.models.Lecture;
-import sdk.models.Review;
-import sdk.models.User;
-import sdk.services.Service;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import java.util.Scanner;
 
 
 
@@ -50,8 +35,8 @@ public class View {
     public void mainMenu() {
 
         System.out.println("Welcome to Evaluation");
-        System.out.println("(1) -  Login");
-        System.out.println("(2) -  Exit");
+        System.out.println("(1) -  To login");
+        System.out.println("(2) -  To exit");
 
         input = new Scanner(System.in);
         int choice = input.nextInt();

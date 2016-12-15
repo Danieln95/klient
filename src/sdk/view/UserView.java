@@ -5,7 +5,6 @@ import sdk.models.Course;
 import sdk.models.Lecture;
 import sdk.models.Review;
 import sdk.models.User;
-import sdk.security.Digester;
 import sdk.services.Service;
 
 import java.util.ArrayList;
@@ -41,10 +40,10 @@ public class UserView {
 
         System.out.println("Welcome to the user menu. You have following choices: \n");
         System.out.println("(1) -  Get lectures");
-        System.out.println("(2) -  Get courses");
-        System.out.println("(3) -  Get review");
-        System.out.println("(4) -  Add Review (rating)");
-        System.out.println("(5) -  Delete review");
+        System.out.println("(2) -  Get your courses");
+        System.out.println("(3) -  Get your review");
+        System.out.println("(4) -  Add review to lecture");
+        System.out.println("(5) -  Delete your review");
         System.out.println("(6) -  Log out");
 
             /**

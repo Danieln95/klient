@@ -1,7 +1,7 @@
 package sdk.models;
 
 /**
- * Created by kknhd on 02-12-2016.
+ * Created by Daniel on 02-12-2016.
  */
 
 
