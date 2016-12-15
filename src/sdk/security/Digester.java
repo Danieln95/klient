@@ -36,12 +36,7 @@ public class Digester {
      * @param str
      * @return Hashing begins.
      */
-    public static String hash(String str) {
-        if (str == null || str.length() == 0) {
-            throw new IllegalArgumentException("Error");
-        }
-        return Digester._hash(str);
-    }
+
 
     /**
      * @param str
@@ -75,55 +70,5 @@ public class Digester {
         return hexString.toString();
     }
 
-
-    public static String encrypt(String s) {
-
-        String encrypted_string = s;
-
-
-        encrypted_string = base64Encode(xorWithKey(encrypted_string.getBytes(), KEY.getBytes()));
-
-        return encrypted_string;
-    }
-
-    public static String decrypt(String s) {
-
-        String decrypted_string = s;
-
-
-        decrypted_string = new String(xorWithKey(base64Decode(s), KEY.getBytes()));
-
-        return decrypted_string;
-    }
-
-
-    private static byte[] xorWithKey(byte[] a, byte[] key) {
-        byte[] out = new byte[a.length];
-        for (int i = 0; i < a.length; i++) {
-            out[i] = (byte) (a[i] ^ key[i % key.length]);
-        }
-        return out;
-    }
-
-    /**
-     * @param s
-     * @return Method to decrypt
-     */
-
-    private static byte[] base64Decode(String s) {
-        try {
-            BASE64Decoder d = new BASE64Decoder();
-            return d.decodeBuffer(s);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    //metode til kryptering
-    private static String base64Encode(byte[] bytes) {
-        BASE64Encoder enc = new BASE64Encoder();
-        return enc.encode(bytes).replaceAll("\\s", "");
-
-    }
 }
 
